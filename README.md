@@ -24,3 +24,5 @@ AWS Certified Solutions Architect - Associate
 - [ ] AWS 서비스 훑기
 
 - [ ] 시험 등록하기
+
+- [ ] [udemy SAA 강의 수강](https://github.com/KOO-YS/certificate/tree/main/udemy) 
