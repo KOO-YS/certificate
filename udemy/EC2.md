@@ -128,3 +128,24 @@ ssh -i key-file-name.pem ec2-user@public-ip
 Tip : Windows 10 이상의 버전들에서는 ssh 명령어를 사용할 수 있다
 
 10 이전 버전에서는 `ssh command not found` 문구가 표시되고 putty를 사용해야 한다
+
+<br>
+
+---
+
+## EC2 가격 정책
+
+오랜 시간 동안 사용해야 하는 서버가 있을 경우 비용 절감이 가능하다
+
+- On-Demand instances : 예측 가능한 가격, 단기간 워크로드 용
+`Pay for what you use` → 비싸지만 측정이 가능
+- Reserved (최소 1년) 
+`온디맨드의 75%까지 절약 가능` → 기간이 길수록, 미리 결제할 수록
+    - Reserved Instances : 단순 예약 인스턴스. 장기간 워크로드
+    - Convertible Reserved Instances : 전환형 예약 인스턴스. 시간이 지난 후 다른 종류의 인스턴스로 바꿀 수 있는 유연형 인스턴스
+    - Scheduled Reserved Instances : 정기 예약 인스턴스. (예시) 매주 목요일 3 ~ 6시 동안만 서버가 필요한 경우 사용
+- Spot Instances : 단기간 워크로드. 저렴하나 손실 가능성이 있어서 신뢰도가 낮음
+`온디맨드의 90%까지 절약 가능`  → 인스턴스가 언제든 중단될 수 있으니, 실패에 대응할 수 있는 서비스만 사용할 것
+- Dedicated Hosts : 전용 호스트. 전체 물리 서버를 예약하고 인스턴스 배치를 제어
+    
+    `기존 서버 결합 소프트웨어 라이센스의 사용이 가능해서 비용 절감 가능`
