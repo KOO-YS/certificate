@@ -67,7 +67,7 @@
 - IPv4인지 IPv6인지 확인
 - 외부에서 인스턴스 안으로 들어오는 inbound network 통제
 - 인스턴스에서 외부로 나가는 outbound network 통제
-
+<img src="https://user-images.githubusercontent.com/46165696/173852495-8948c849-b0c6-4272-b74c-3b3abb4b538f.png">
 
 <br>
 
@@ -128,6 +128,8 @@ ssh -i key-file-name.pem ec2-user@public-ip
 Tip : Windows 10 이상의 버전들에서는 ssh 명령어를 사용할 수 있다
 
 10 이전 버전에서는 `ssh command not found` 문구가 표시되고 putty를 사용해야 한다
+
+<img src="https://user-images.githubusercontent.com/46165696/173852404-af4aa2c2-d573-4b6d-9b06-d97f7528424f.png">
 
 <br>
 
