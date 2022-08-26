@@ -26,3 +26,6 @@ AWS Certified Solutions Architect - Associate
 - [ ] 시험 등록하기
 
 - [ ] [udemy SAA 강의 수강](https://github.com/KOO-YS/certificate/tree/main/udemy) 
+
+- [ ] [dump](https://www.examtopics.com/exams/amazon/aws-certified-solutions-architect-associate-saa-c02/)
+  - 참고 : https://www.examtopics.com/
