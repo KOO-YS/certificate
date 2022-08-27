@@ -29,3 +29,11 @@ AWS Certified Solutions Architect - Associate
 
 - [ ] [dump](https://www.examtopics.com/exams/amazon/aws-certified-solutions-architect-associate-saa-c02/)
   - 참고 : https://www.examtopics.com/
+
+
+
+---
+
+# Result
+*Passed*
+<image src="aws-certified-solutions-architect-associate.png"/>
