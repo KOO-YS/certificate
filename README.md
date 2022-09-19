@@ -1,5 +1,6 @@
 # AWS SAA Study Guide
 AWS Certified Solutions Architect - Associate
+**Version** : SAA-C02
 
 ## SAA 시험 정보
 - [AWS 안내 페이지](https://aws.amazon.com/ko/certification/certified-solutions-architect-associate/)
@@ -18,16 +19,20 @@ AWS Certified Solutions Architect - Associate
 ## 목표 
 - 6월 초~중 사이에 시험 합격 (작성일 04.17)
 
+<br>
+
+## 달성
+- 8월 26일 합격
 
 # TODO
 ### from 4th week of April
-- [ ] AWS 서비스 훑기
+- [x] AWS 서비스 훑기
 
-- [ ] 시험 등록하기
+- [x] 시험 등록하기
 
-- [ ] [udemy SAA 강의 수강](https://github.com/KOO-YS/certificate/tree/main/udemy) 
+- [x] [udemy SAA 강의 수강](https://github.com/KOO-YS/certificate/tree/main/udemy) 
 
-- [ ] [dump](https://www.examtopics.com/exams/amazon/aws-certified-solutions-architect-associate-saa-c02/)
+- [x] [dump](https://www.examtopics.com/exams/amazon/aws-certified-solutions-architect-associate-saa-c02/)
   - 참고 : https://www.examtopics.com/
 
 
