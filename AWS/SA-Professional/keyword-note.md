@@ -39,3 +39,28 @@ OAI (Origin Access IDentity)
 - S3 엔드포인트로 접근 시, 엔드포인트 주소는 버킷명을 포함하고 있기 때문에 누군가 직접 접근할 위험성이 있다. -> OAI를 활용해 CloudFront 배포로만 웹사이트에 접근할 수 있도록 설정
   - S3만을 위한 서비스 : S3 Origin 보안 강화를 위해 요청을 식별하는데 사용
 - CloudFront에서 Lambda 함수를 사용 -> [Lambda@Edge](https://docs.aws.amazon.com/ko_kr/AmazonCloudFront/latest/DeveloperGuide/lambda-examples.html)
+
+---
+
+DMS (Database Migration Service)
+- AWS에서 제공하는 RDB 마이그레이션 서비스
+  - 관계형 데이터베이스, 데이터 웨어하우스, NoSQL 데이터베이스 및 기타 유형의 데이터 저장소를 쉽게 마이그레이션할 수 있는 서비스
+- AWS Schema Conversion Tool 변환을 완료하는데 필요한 변환 보고서를 생성
+  - `ex` Oracle에서 Aurora MySQL로 변환 보고서를 실행하고, DMS를 사용하여 데이터를 마이그레이션
+  
+--- 
+
+Enhanced Monitoring (향상된 모니터링)
+- DB 인스턴스, 클러스터가 실행되는 운영 체제에 대한 측정치를 실시간으로 제공
+- 다른 프로세스 또는 스레드에서 CPU 사용방법을 확인하려면 이 지표가 유용
+- RDS는 지표를 확장 모니터링에서 CloudWatch Logs 계정으로 전달, 지표 필터를 생성 후 대시보드에 그래프로 표현
+
+
+--- 
+
+Service Catalog
+- AWS 리소스들을 중앙에서 관리할 수 있고, 규정 준수 요건을 충족할 수 있다
+- 최종 사용자는 조직에서 규정한 제약, 필요에 따라 승인된 리소스만 신속하게 배포 가능
+- 세분화된 액세스 제어
+  - 카탈로그 관리자 : 애플리케이션과 서비스의 카탈로그 관리. 최종 사용자에게 액세스 권한 부여. CloudFormation 템플릿, 제약조건을 구성하고 IAM 역할을 관리
+  - 최종 사용자 : 액세스 권한을 받은 제품을 시작. 
