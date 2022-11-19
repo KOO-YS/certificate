@@ -27,6 +27,7 @@ AWS Certified Solutions Architect - Professional
 # TODO
 ### from 5th week of October
 - [x] AWS 서비스 훑기
+  - [x] [서비스 정의](https://github.com/KOO-YS/certificate/blob/main/AWS/SA-Professional/keyword-note.md) 
 
 - [x] 시험 등록하기
 
@@ -35,6 +36,9 @@ AWS Certified Solutions Architect - Professional
 
 
 
+
 ---
 
 # Result
+*Passed*
+<image src="aws-certified-solutions-architect-professional.png"/>
