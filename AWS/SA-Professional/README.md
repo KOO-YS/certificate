@@ -41,4 +41,4 @@ AWS Certified Solutions Architect - Professional
 
 # Result
 *Passed*
-<image src="aws-certified-solutions-architect-professional.png"/>
+<image src="aws-certified-solutions-architect-professional.png" style="width:138px;" />
