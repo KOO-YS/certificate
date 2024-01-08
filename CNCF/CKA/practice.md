@@ -156,9 +156,84 @@ node/controlplane untainted
     - NoSchedule : 해당 노드에 위치할 수 없다
     - PreferNoSchedule : 해당 노드에 파드를 위치시키기를 기피하지만, 확실하지 않다
     - NoExecute : 새 파드가 해당 노드에 위치시키지 않고, 기존에 있던 노드 역시 toleration이 발견되지 않는다면 퇴거 시킨다
-    
+```bash
+kubectl describe node controlplane | grep -i taints
+```
 
-### Node Affinity - KEEP
+### Node Affinity
+
+Set Node Affinity to the deployment to place the pods on `node01` only.
+
+- Name: blue
+- Replicas: 3
+- Image: nginx
+- NodeAffinity: requiredDuringSchedulingIgnoredDuringExecution
+- Key: color
+- value: blue
+
+```bash
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: nginx
+  template:
+    metadata:
+      labels:
+        run: nginx
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: Always
+        name: nginx
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: color
+                operator: In
+                values:
+                - blue
+```
+
+Create a new deployment named `red` with the `nginx` image and `2` replicas, and ensure it gets placed on the `controlplane` node only.
+
+Use the label key - `node-role.kubernetes.io/control-plane` - which is already set on the `controlplane` node.
+
+```bash
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: red
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: nginx
+  template:
+    metadata:
+      labels:
+        run: nginx
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: Always
+        name: nginx
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: Exists
+```
 
 ### Monitoring
 
@@ -173,4 +248,102 @@ node01         18m          0%     300Mi           0%
 kubectl top node --sort-by='memory' --no-headers | head -1
 
 kubectl top pod --sort-by='cpu' --no-headers | tail -1
+```
+
+### Resource Requirement and Limit
+
+The status `OOMKilled` indicates that it is failing because the pod ran out of memory. Identify the memory limit set on the POD.
+
+```bash
+ State:          Waiting
+      Reason:       CrashLoopBackOff
+    Last State:     Terminated
+      Reason:       OOMKilled
+      Exit Code:    1
+      Started:      Mon, 08 Jan 2024 10:23:13 +0000
+      Finished:     Mon, 08 Jan 2024 10:23:13 +0000
+    Ready:          False
+```
+
+The `elephant` pod runs a process that consumes 15Mi of memory. Increase the limit of the `elephant` pod to 20Mi.
+
+```bash
+spec:
+  containers:
+  - args:
+    - --vm
+    - "1"
+    - --vm-bytes
+    - 15M
+    - --vm-hang
+    - "1"
+    command:
+    - stress
+    image: polinux/stress
+    imagePullPolicy: Always
+    name: mem-stress
+    resources:
+      limits:
+        memory: 20Mi
+      requests:
+        memory: 5Mi
+```
+
+### DaemonSet
+
+On how many nodes are the pods scheduled by the **DaemonSet** `kube-proxy`?
+
+```bash
+k describe daemonset kube-proxy --namespace=kube-system
+```
+
+Deploy a **DaemonSet** for `FluentD` Logging.
+
+1. create Deployment file
+2. edit `kind` and requirements
+
+### Static Pod
+
+- kubelet이 node를 독립적으로 관리
+- 다른 클러스터의 도움 없이 kubelet 자체로 생성된 pod들
+
+What is the path of the directory holding the static pod definition files?
+
+1. kubelet 설정 파일 위치 확인
+
+```bash
+controlplane ~ ➜  ps -aux | grep /usr/bin/kubelet
+
+root        4689  0.0  0.0 3627016 106128 ?      Ssl  06:34   0:12 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock --pod-infra-container-image=registry.k8s.io/pause:3.9
+root        9000  0.0  0.0   6748   720 pts/1    S+   06:44   0:00 grep --color=auto /usr/bin/kubelet
+```
+
+- `--config=/var/lib/kubelet/config.yaml`
+1. 파일 내에서 `staticpod` 키워드 검색
+
+```bash
+controlplane ~ ➜  grep -i staticpod /var/lib/kubelet/config.yaml
+staticPodPath: /etc/kubernetes/manifests
+```
+
+How many pod definition files are present in the manifests directory?
+
+```bash
+controlplane ~ ➜  cd /etc/kubernetes/manifests/
+
+controlplane /etc/kubernetes/manifests ➜  ls
+etcd.yaml  kube-apiserver.yaml  kube-controller-manager.yaml  kube-scheduler.yaml
+```
+
+- etcd
+- kube-apiserver
+- kube-controller-manager
+- kube-scheduler
+
+### Label
+
+Apply a label `color=blue` to node `node01`
+
+```bash
+kubectl label node node01 color=blue
 ```
