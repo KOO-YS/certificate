@@ -1,6 +1,6 @@
 # Practice Command
 
-### Imperative command
+### Service
 
 service 
 
@@ -92,6 +92,12 @@ Create a pod called `httpd` using the image `httpd:alpine` in the default na
 
 ```bash
 k run httpd --image=httpd:alpine --port=80 --expose
+```
+
+Create a service `messaging-service` to expose the `messaging` application within the cluster on port `6379`.
+
+```bash
+ kubectl expose pod messaging --port=6379 --name messaging-service
 ```
 
 ### Scheduling
