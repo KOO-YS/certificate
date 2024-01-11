@@ -249,8 +249,137 @@ spec:
 ```
 
 ## Taint
+- 조건을 걸어서 Pod가 특정 Node를 피하는 방법
 ```shell
 k describe node | grep -i taint
 # taint output이 <none>이라면 스케줄링 가능
 # taint -> node-role.kubernetes.io/master:NoSchedule -> 스케줄링 불가능
+```
+
+## Multi Container
+- 하나의 Pod에 2개 이상의 컨테이너 이미지
+
+- nginx 이미지를 가진 pod yaml 생성
+```shell
+k run pod01 --image=nginx --dry-run=client -o yaml > pod01.yaml
+```
+
+- 생성된 yaml 파일에 containers: 하단에 이미지 정보 추가
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+  # 하나 더 추가
+  - name: httpd
+    image: httpd
+```
+
+## PV
+- pod마다 볼륨 설정은 유지보수에 취약하며, 중앙집중 형식으로 볼륨을 관리하고자 함
+- Persistent Volume : 관리자에 의해 설정된 클러스터 기반 저장소 풀
+- persist volume은 `k create` 명령어로 생성할 수 없다. kubernetes.io 사이트에서 적당히 복붙해서 파일 생성
+
+```shell
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv0003
+spec:
+  capacity: # 변경 자주 나옴
+    storage: 5Gi
+  #volumeMode: Filesystem
+  accessModes: # 변경 자주 나옴
+    - ReadWriteOnce
+  hostPath:
+    path: "/temp/volumes"
+  persistentVolumeReclaimPolicy: Recycle # 변경 자주 나옴
+```
+
+## PVC
+- 관리자가 Persistent Volume를 생성하고 사용자는 저장소를 사용하기 위해 Persistent Volume Claims를 생성한다
+    - 연결 시 쿠버네티스는 claim이 요청한 만큼 볼륨이 충분한 공간을 가지고 있는지 체크한다
+    - Persistent Volume Claims이 생성되면 volume과 연결 (1:1로 연결)
+    - 만약 충분한 공간이 없다면 persistent volume claim은 클러스터에 크기가 충분한 새 볼륨이 생길 때까지 pending 상태로 남아있다가 자동 연결된다
+
+- claim 생성
+```shell
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: claim-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: storage-class
+#   selector:
+#     matchLabels:
+#       release: "stable"
+#     matchExpressions:
+#       - {key: environment, operator: In, values: [dev]}
+```
+
+- Pod에 claim 연결
+```shell
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: nginx
+      volumeMounts: # pod에서 저장할 정보 위치
+      - mountPath: "/var/www/html"
+        name: mypd
+  volumes:
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: claim-pv
+```
+
+- pvc 변경 시, 변경 이력을 기록  
+```shell
+k edit pvc claim-pv --record
+```
+
+
+## Log
+```shell
+k logs pod01 | grep keyword > /path/iwant
+```
+
+## Resource
+- 같은 라벨을 가진 pod 사이에서 리소스 사용량 확인
+```shell
+k top pod -l tier=frontend
+```
+
+## systemctl
+- kubelet 상태 확인 및 재시작 방법
+```shell
+# node 상태 확인
+k get nodes
+# if node status is NotReady?
+# go into nodo inside
+ssh node01
+
+node01:~$ sudo i
+root:~$ systemctl status kubelet
+# Active: inactive (dead) -> 동작하지 않음
+
+root:~$ systemctl restart kubelet
+root:~$ systemctl status kubelet
+# Active: active -> 동작!
+
+exit
+
 ```
